@@ -12,11 +12,12 @@ typedef struct Cliente {
     char conta[CONTA];
 } Cliente;
 
-typedef enum {OK, SENHA_CURTA, LIMITE_CLIENTES, CPF_INVALIDO} ERROS;
+typedef enum {OK, SENHA_CURTA, LIMITE_CLIENTES, CPF_INVALIDO, CLIENTE_NAO_ENCONTRADO} ERROS;
 
 typedef ERROS (*funcao)(Cliente[], int*);
 
 ERROS criar (Cliente clientes[], int *pos);
+ERROS deletar(Cliente clientes[], int *pos);
 
 void clearBuffer();
 

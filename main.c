@@ -10,6 +10,7 @@ int main() {
   do {
     printf("\nMenu Principal\n");
     printf("1 - Criar conta\n");
+    printf("2 - Deletar conta\n");
     printf("0 - Sair\n");
     printf("Escolha uma opção: ");
 
@@ -18,6 +19,9 @@ int main() {
     switch (opcao){
       case 1:
       resultado = criar(clientes, &pos);
+      break;
+      case 2: 
+      resultado = deletar(clientes, &pos);
       break;
     }
   } while (opcao != 0);

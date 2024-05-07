@@ -50,6 +50,37 @@ ERROS criar(Cliente clientes[], int *pos) {
   return OK; // Retorna OK para indicar que a operação foi concluída com sucesso
 }
 
+
+ERROS deletar(Cliente clientes[], int *pos) {
+  char cpf[CPF]; // Variável para armazenar o CPF a ser excluído
+  int i, j;
+  printf("Digite o CPF do cliente que deseja excluir: ");
+  fgets(cpf, sizeof(cpf), stdin); // Lê o CPF do cliente a ser excluído
+  cpf[strcspn(cpf, "\n")] = '\0'; // Remove o caractere de nova linha
+
+  // Procura o cliente pelo CPF
+  for (i = 0; i < *pos; i++) {
+    if (strcmp(clientes[i].cpf, cpf) == 0) { // Se encontrar o cliente com o CPF fornecido
+      // Move todos os clientes após o cliente a ser excluído uma posição para frente
+      for (j = i; j < *pos - 1; j++) {
+        strcpy(clientes[j].nome, clientes[j + 1].nome);
+        strcpy(clientes[j].cpf, clientes[j + 1].cpf);
+        strcpy(clientes[j].conta, clientes[j + 1].conta);
+        clientes[j].saldo = clientes[j + 1].saldo;
+        strcpy(clientes[j].senha, clientes[j + 1].senha);
+      }
+      // Decrementa o número total de clientes
+      *pos = *pos - 1;
+      printf("Cliente excluído com sucesso.\n");
+      return OK; // Retorna OK para indicar que o cliente foi excluído com sucesso
+    }
+  }
+
+  // Se não encontrar o cliente com o CPF fornecido, exibe mensagem de erro
+  printf("Cliente com CPF %s não encontrado.\n", cpf);
+  return CLIENTE_NAO_ENCONTRADO; // Retorna erro indicando que o cliente não foi encontrado
+}
+
 void clearBuffer() {
   int c;
   while ((c = getchar()) != '\n' && c != EOF); // Limpa o buffer de entrada
