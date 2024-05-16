@@ -97,6 +97,24 @@ ERROS listar(Cliente clientes[], int *pos) {
   return OK;
 }
 
+ERROS salvarbinario(Cliente clientes[], int *pos) {
+    FILE *arquivo = fopen("contas.bin", "wb");
+
+    if (arquivo == NULL) {
+        return ABRIR; // Retornar erro
+    }
+
+    // Escrever os dados dos clientes no arquivo
+    if (fwrite(clientes, sizeof(Cliente), pos, arquivo) != pos) {
+        fclose(arquivo); // Fechar o arquivo antes de retornar o erro
+        return ESCRITA; // Retornar erro de escrita
+    }
+
+    fclose(arquivo);
+    printf("Dados salvos com sucesso.\n");
+    return OK; // Retornar OK
+}
+
 void clearBuffer() {
   int c;
   while ((c = getchar()) != '\n' && c != EOF)
