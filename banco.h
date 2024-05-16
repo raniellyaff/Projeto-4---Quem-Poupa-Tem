@@ -20,6 +20,8 @@ typedef enum {
   CLIENTE_NAO_ENCONTRADO,
   SEM_CLIENTES,
   LISTA_VAZIA,
+  ABRIR,
+  ESCRITA,
 } ERROS;
 
 typedef ERROS (*funcao)(Cliente[], int *);
@@ -27,5 +29,6 @@ typedef ERROS (*funcao)(Cliente[], int *);
 ERROS criar(Cliente clientes[], int *pos);
 ERROS deletar(Cliente clientes[], int *pos);
 ERROS listar(Cliente clientes[], int *pos);
+ERROS salvarbinario(Cliente clientes[], int *pos);
 
 void clearBuffer();
