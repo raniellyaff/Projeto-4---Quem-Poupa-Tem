@@ -10,10 +10,11 @@ typedef struct Cliente {
   char senha[SENHA];
   int saldo;
   char conta[CONTA];
+  int limiteNegativo;
 } Cliente;
 
 typedef enum {
-  OK,
+OK,
   SENHA_CURTA,
   LIMITE_CLIENTES,
   CPF_INVALIDO,
@@ -22,6 +23,7 @@ typedef enum {
   LISTA_VAZIA,
   ABRIR,
   ESCRITA,
+  CONTA_INVALIDA,
 } ERROS;
 
 typedef ERROS (*funcao)(Cliente[], int *);

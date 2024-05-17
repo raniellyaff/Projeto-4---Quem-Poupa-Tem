@@ -20,12 +20,23 @@ ERROS criar(Cliente clientes[], int *pos) {
     }
   } while (strlen(clientes[*pos].cpf) != 11); // Continua pedindo o CPF até que tenha 11 dígitos
 
-  printf("A sua conta será COMUM ou PLUS? ");
-  fgets(clientes[*pos].conta, CONTA, stdin); // Lê o tipo de conta do cliente
+  do {
+    printf("A sua conta será COMUM ou PLUS? ");
+    fgets(clientes[*pos].conta, CONTA, stdin);
+    clientes[*pos].conta[strcspn(clientes[*pos].conta, "\n")] = '\0';
+
+    if (strcmp(clientes[*pos].conta, "COMUM") == 0) {
+      clientes[*pos].limiteNegativo = -1000;
+    } else if (strcmp(clientes[*pos].conta, "PLUS") == 0) {
+      clientes[*pos].limiteNegativo = -5000;
+    } else {
+      printf("Tipo de conta inválido. Escolha entre COMUM ou PLUS.\n");
+      clientes[*pos].conta[0] = '\0';
+    }
+  } while (clientes[*pos].conta[0] == '\0');
 
   printf("Qual será o valor inicial da sua conta? ");
-  scanf("%d", &clientes[*pos].saldo); // Lê o saldo inicial do cliente
-
+  scanf("%d", &clientes[*pos].saldo);
   clearBuffer(); // Limpa o buffer novamente
 
   do {
@@ -88,7 +99,7 @@ ERROS listar(Cliente clientes[], int *pos) {
   for (int i = 0; i < *pos; i++) { // inicial o loop
     printf("\nNome: %s", clientes[i].nome);
     printf("CPF: %s\n", clientes[i].cpf);
-    printf("Conta: %s", clientes[i].conta);
+    printf("Conta: %s\n", clientes[i].conta);
     printf("Saldo: %d\n", clientes[i].saldo);
     printf("Senha: %s\n", clientes[i].senha);
   }
