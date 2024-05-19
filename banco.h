@@ -3,10 +3,17 @@
 #define CONTA 10
 #define SENHA 10
 #define CPF 13
+#define TIPO 3
+
+typedef enum {
+    COMUM,
+    PLUS
+} TipoConta;
 
 typedef struct Cliente {
   char nome[NOME];
   char cpf[CPF];
+  TipoConta tipo_conta;
   char senha[SENHA];
   float saldo;
   char conta[CONTA];
@@ -25,6 +32,8 @@ typedef enum {
   SALDO_INSUFICIENTE,
   SENHA_INCORRETA,
 } ERROS;
+
+
 
 typedef ERROS (*funcao)(Cliente[], int *);
 
