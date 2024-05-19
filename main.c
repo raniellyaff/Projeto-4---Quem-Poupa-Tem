@@ -14,6 +14,7 @@ int main() {
     printf("3 - Listar contas\n");
     printf("4 - Débito\n");
     printf("5 - Depósito\n");
+    printf("6 - PIX\n");
     printf("8 - Salvar em Binário\n");
     printf("0 - Sair\n");
     printf("Escolha uma opção: ");
@@ -35,6 +36,9 @@ int main() {
         break;
       case 5:
         resultado = deposito(clientes, &pos);
+        break;
+      case 6:
+        resultado = pix(clientes, &pos);
         break;
       case 8:
         resultado = salvarbinario(clientes, &pos);
