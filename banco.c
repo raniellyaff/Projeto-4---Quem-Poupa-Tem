@@ -169,6 +169,30 @@ ERROS debito(Cliente clientes[], int *pos) {
     return CLIENTE_NAO_ENCONTRADO; // Retorna erro indicando que o cliente não foi encontrado
 }
 
+ERROS deposito(Cliente clientes[], int *pos) {
+  char cpf[CPF]; // Variável para armazenar o CPF
+  int valor; // Variável para armazenar o valor a ser debitado
+  int i;
+
+  printf("Digite o CPF do cliente: ");
+  fgets(cpf, sizeof(cpf), stdin); // Lê o CPF do cliente
+  cpf[strcspn(cpf, "\n")] = '\0'; // Remove o caractere de nova linha
+
+  // Procura o cliente pelo CPF
+  for (i = 0; i < *pos; i++) {
+    if (strcmp(clientes[i].cpf, cpf) == 0) { // Se encontrar o cliente com o CPF fornecido
+      printf("Digite o valor a ser depositado: ");
+      scanf("%d", &valor); // Lê o valor a ser debitado
+      clientes[i].saldo += valor; // Debita o valor da conta
+      printf("Valor depositado com sucesso.\n");
+      return OK; // Retorna OK indicando que o débito foi realizado com sucesso
+    } else {
+      printf("Cliente com CPF %s não encontrado.\n", cpf);
+      return CLIENTE_NAO_ENCONTRADO; // Retorna erro indicando que o cliente não foi encontrado
+      }
+  }
+  return OK;
+}
 
 void clearBuffer() {
   int c;
