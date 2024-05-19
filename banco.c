@@ -157,7 +157,7 @@ ERROS debito(Cliente clientes[], int *pos) {
 
 ERROS deposito(Cliente clientes[], int *pos) {
   char cpf[CPF]; // Variável para armazenar o CPF
-  int valor; // Variável para armazenar o valor a ser debitado
+  int valor; // Variável para armazenar o valor a ser depositado
   int i;
 
   printf("Digite o CPF do cliente: ");
@@ -168,75 +168,77 @@ ERROS deposito(Cliente clientes[], int *pos) {
   for (i = 0; i < *pos; i++) {
     if (strcmp(clientes[i].cpf, cpf) == 0) { // Se encontrar o cliente com o CPF fornecido
       printf("Digite o valor a ser depositado: ");
-      scanf("%d", &valor); // Lê o valor a ser debitado
-      clientes[i].saldo += valor; // Debita o valor da conta
+      scanf("%d", &valor); // Lê o valor a ser depositado
+      clientes[i].saldo += valor; // Credita o valor na conta
+      clearBuffer(); // Limpa o buffer após scanf
       printf("Valor depositado com sucesso.\n");
-      return OK; // Retorna OK indicando que o débito foi realizado com sucesso
-    } else {
-      printf("Cliente com CPF %s não encontrado.\n", cpf);
-      return CLIENTE_NAO_ENCONTRADO; // Retorna erro indicando que o cliente não foi encontrado
-      }
+      return OK; // Retorna OK indicando que o depósito foi realizado com sucesso
+    }
   }
-  clearBuffer();
-  return OK;
+
+  // Se não encontrar o cliente com o CPF fornecido, exibe mensagem de erro
+  printf("Cliente com CPF %s não encontrado.\n", cpf);
+  clearBuffer(); // Limpa o buffer após fgets
+  return CLIENTE_NAO_ENCONTRADO; // Retorna erro indicando que o cliente não foi encontrado
 }
 
 ERROS pix(Cliente clientes[], int *pos) {
-  char cpfOrigem[CPF]; // Variável para armazenar o CPF
-  char senha[SENHA]; // Variável para armazenar a senha
-  char cpfDestino[CPF];
-  float valor; // Variável para armazenar o valor a ser debitado
-  int i;
-  int j;
+    char cpfOrigem[CPF]; // Variável para armazenar o CPF
+    char senha[SENHA]; // Variável para armazenar a senha
+    char cpfDestino[CPF];
+    float valor; // Variável para armazenar o valor a ser debitado
+    int i;
+    int j;
+    int clienteDestinoEncontrado = 0;
 
-  printf("Digite o CPF da conta de origem: ");
-  fgets(cpfOrigem, sizeof(cpfOrigem), stdin);
-  cpfOrigem[strcspn(cpfOrigem, "\n")] = '\0';
+    printf("Digite o CPF da conta de origem: ");
+    fgets(cpfOrigem, sizeof(cpfOrigem), stdin);
+    cpfOrigem[strcspn(cpfOrigem, "\n")] = '\0';
 
-  printf("Digite a senha da conta de origem: ");
-  fgets(senha, sizeof(senha), stdin);
-  senha[strcspn(senha, "\n")] = '\0';
+    printf("Digite a senha da conta de origem: ");
+    fgets(senha, sizeof(senha), stdin);
+    senha[strcspn(senha, "\n")] = '\0';
 
-  printf("Digite o CPF da conta de destino: ");
-  fgets(cpfDestino, sizeof(cpfDestino), stdin);
-  cpfDestino[strcspn(cpfDestino, "\n")] = '\0';
+    printf("Digite o CPF da conta de destino: ");
+    fgets(cpfDestino, sizeof(cpfDestino), stdin);
+    cpfDestino[strcspn(cpfDestino, "\n")] = '\0';
 
-  printf("Digite o valor a ser transferido: ");
-  scanf("%f", &valor);
+    printf("Digite o valor a ser transferido: ");
+    scanf("%f", &valor);
+    clearBuffer(); // Limpa o buffer após scanf
 
-  for (i = 0; i < *pos; i++) {
-    if (strcmp(clientes[i].cpf, cpfOrigem) == 0) {
-      // Verifica se a senha está correta
-      if (strcmp(clientes[i].senha, senha) == 0) {
-        // Verifica se o saldo é suficiente para transferência
-        if (clientes[i].saldo >= valor) {
-          // Procura o cliente de destino
-          for (j = 0; j < *pos; j++) {
-            if (strcmp(clientes[j].cpf, cpfDestino) == 0) {
-              // Realiza a transferência
-              clientes[i].saldo -= valor;
-              clientes[j].saldo += valor;
-              printf("Transferência realizada com sucesso.\n");
-              return OK;
+    for (i = 0; i < *pos; i++) {
+        if (strcmp(clientes[i].cpf, cpfOrigem) == 0) {
+            // Verifica se a senha está correta
+            if (strcmp(clientes[i].senha, senha) == 0) {
+                // Verifica se o saldo é suficiente para transferência
+                if (clientes[i].saldo >= valor) {
+                    // Procura o cliente de destino
+                    for (j = 0; j < *pos; j++) {
+                        if (strcmp(clientes[j].cpf, cpfDestino) == 0) {
+                            // Realiza a transferência
+                            clientes[i].saldo -= valor;
+                            clientes[j].saldo += valor;
+                            printf("Transferência realizada com sucesso.\n");
+                            return OK;
+                        }
+                    }
+                    // Se chegou aqui, a conta de destino não foi encontrada
+                    printf("Conta de destino não encontrada.\n");
+                    return CLIENTE_NAO_ENCONTRADO;
+                } else {
+                    printf("Saldo insuficiente.\n");
+                    return SALDO_INSUFICIENTE;
+                }
+            } else {
+                printf("Senha incorreta.\n");
+                return SENHA_INCORRETA;
             }
-            printf("Conta de destino não encontrada.\n");
-            return CLIENTE_NAO_ENCONTRADO;
-          }            
-        } else {
-          printf("Saldo insuficiente.\n");
-          return SALDO_INSUFICIENTE;
         }
-      } else {
-        printf("Senha incorreta.\n");
-        return SENHA_INCORRETA;
-      }
-    } else {
-      printf("Conta de origem não encontrada.\n");
-      return CLIENTE_NAO_ENCONTRADO;
     }
-  }
-  return OK;
-  clearBuffer();
+    // Se chegou aqui, a conta de origem não foi encontrada
+    printf("Conta de origem não encontrada.\n");
+    return CLIENTE_NAO_ENCONTRADO;
 }
 
 void clearBuffer() {

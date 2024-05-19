@@ -8,7 +8,7 @@ typedef struct Cliente {
   char nome[NOME];
   char cpf[CPF];
   char senha[SENHA];
-  int saldo;
+  float saldo;
   char conta[CONTA];
 } Cliente;
 
@@ -22,6 +22,8 @@ typedef enum {
   LISTA_VAZIA,
   ABRIR,
   ESCRITA,
+  SALDO_INSUFICIENTE,
+  SENHA_INCORRETA,
 } ERROS;
 
 typedef ERROS (*funcao)(Cliente[], int *);
@@ -30,5 +32,8 @@ ERROS criar(Cliente clientes[], int *pos);
 ERROS deletar(Cliente clientes[], int *pos);
 ERROS listar(Cliente clientes[], int *pos);
 ERROS salvarbinario(Cliente clientes[], int *pos);
+ERROS debito(Cliente clientes[], int *pos);
+ERROS deposito(Cliente clientes[], int *pos);
+ERROS pix(Cliente clientes[], int *pos);
 
 void clearBuffer();
