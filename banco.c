@@ -20,14 +20,23 @@ ERROS criar(Cliente clientes[], int *pos) {
     }
   } while (strlen(clientes[*pos].cpf) != 11); // Continua pedindo o CPF até que tenha 11 dígitos
 
-  printf("A sua conta será COMUM ou PLUS? ");
-  fgets(clientes[*pos].conta, CONTA, stdin); // Lê o tipo de conta do cliente
+  char tipo[TIPO]; // Definindo a variável tipo para armazenar a entrada do usuário
+  
+  do {
+      printf("A sua conta será COMUM (C) ou PLUS (P)? ");
+      fgets(tipo, TIPO, stdin); // Lê o tipo de conta do cliente
+      if (tipo[0] == 'C' || tipo[0] == 'P'){
+        clientes[*pos].tipo_conta = (tipo[0] == 'C')  ? COMUM : PLUS;
+      }else{
+        printf("Tipo de conta inválido. Escolha 'C' para Comum ou 'P' para Plus.\n");
+      }
+  } while (clientes[*pos].tipo_conta != COMUM && clientes[*pos].tipo_conta != PLUS);
 
   printf("Qual será o valor inicial da sua conta? ");
   scanf("%f", &clientes[*pos].saldo); // Lê o saldo inicial do cliente
 
   clearBuffer(); // Limpa o buffer novamente
-
+  
   do {
     printf("Crie uma senha com 8 dígitos: ");
     fgets(clientes[*pos].senha, sizeof(clientes[*pos].senha), stdin); // Lê a senha do cliente
@@ -87,7 +96,7 @@ ERROS listar(Cliente clientes[], int *pos) {
   for (int i = 0; i < *pos; i++) { // inicial o loop
     printf("\nNome: %s", clientes[i].nome);
     printf("CPF: %s\n", clientes[i].cpf);
-    printf("Conta: %s", clientes[i].conta);
+    printf("Conta: %s\n", clientes[i].tipo_conta == COMUM ? "COMUM" : "PLUS");
     printf("Saldo: %.2f\n", clientes[i].saldo);
     printf("Senha: %s\n", clientes[i].senha);
   }
@@ -136,15 +145,18 @@ ERROS debito(Cliente clientes[], int *pos) {
         printf("Digite o valor a ser debitado: ");
         scanf("%d", &valor); // Lê o valor a ser debitado
         // Verifica se há saldo suficiente na conta
-        if (clientes[i].saldo >= valor) {
-          clientes[i].saldo -= valor; // Debita o valor da conta
-          printf("Valor debitado com sucesso.\n");
-          return OK; // Retorna OK indicando que o débito foi realizado com sucesso
+        float taxa = (clientes[i].tipo_conta == COMUM) ? 0.05f : 0.03f; // Taxa de acordo com o tipo de conta
+        float valor_debitado = valor * (1 + taxa);
+        float saldo_negativo_maximo = (clientes[i].tipo_conta == COMUM) ? -1000.0f : -5000.0f; // Limite de saldo negativo
+        if (clientes[i].saldo - valor_debitado >= saldo_negativo_maximo) {
+            clientes[i].saldo -= valor_debitado; // Debita o valor da conta
+            printf("Valor debitado com sucesso.\n");
+            return OK; // Retorna OK indicando que o débito foi realizado com sucesso
         } else {
-          printf("Saldo insuficiente.\n");
-          return SALDO_INSUFICIENTE; // Retorna erro indicando saldo insuficiente
-        }
-      } else {
+            printf("Saldo insuficiente ou limite de saldo negativo excedido.\n");
+            return SALDO_INSUFICIENTE; // Retorna erro indicando saldo insuficiente ou limite de saldo negativo excedido
+            }
+      }else {
         printf("Senha incorreta.\n");
         return SENHA_INCORRETA; // Retorna erro indicando senha incorreta
       }
