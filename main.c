@@ -12,6 +12,7 @@ int main() {
     printf("1 - Criar conta\n");
     printf("2 - Deletar conta\n");
     printf("3 - Listar contas\n");
+    printf("4 - Débito\n");
     printf("8 - Salvar em Binário\n");
     printf("0 - Sair\n");
     printf("Escolha uma opção: ");
@@ -24,8 +25,12 @@ int main() {
       break;
       case 2: 
       resultado = deletar(clientes, &pos);
+      break;
       case 3:
       resultado = listar(clientes, &pos);
+      break;
+      case 4:
+      resultado = debito(clientes, &pos);
       case 8:
       resultado = salvarbinario(clientes, &pos);
       break;
