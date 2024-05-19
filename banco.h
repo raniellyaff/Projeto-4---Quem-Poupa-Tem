@@ -4,6 +4,14 @@
 #define SENHA 10
 #define CPF 13
 #define TIPO 3
+#define MAX_OPERACOES 5000
+
+// Estrutura para representar uma operação no extrato
+typedef struct {
+    char tipo_operacao[20];
+    float valor;
+    float tarifa;
+} Operacao;
 
 typedef enum {
     COMUM,
@@ -31,6 +39,8 @@ typedef enum {
   ESCRITA,
   SALDO_INSUFICIENTE,
   SENHA_INCORRETA,
+  ERRO_ARQUIVO,
+  CREDENCIAIS_INVALIDAS,
 } ERROS;
 
 
@@ -44,5 +54,6 @@ ERROS salvarbinario(Cliente clientes[], int *pos);
 ERROS debito(Cliente clientes[], int *pos);
 ERROS deposito(Cliente clientes[], int *pos);
 ERROS pix(Cliente clientes[], int *pos);
+ERROS extrato(Cliente clientes[], int *pos);
 
 void clearBuffer();
