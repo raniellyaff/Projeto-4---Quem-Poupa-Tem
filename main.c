@@ -13,6 +13,8 @@ int main() {
     printf("2 - Deletar conta\n");
     printf("3 - Listar contas\n");
     printf("4 - Débito\n");
+    printf("5 - Depósito\n");
+    printf("6 - PIX\n");
     printf("8 - Salvar em Binário\n");
     printf("0 - Sair\n");
     printf("Escolha uma opção: ");
@@ -21,19 +23,26 @@ int main() {
     clearBuffer();
     switch (opcao){
       case 1:
-      resultado = criar(clientes, &pos);
-      break;
+        resultado = criar(clientes, &pos);
+        break;
       case 2: 
-      resultado = deletar(clientes, &pos);
-      break;
+        resultado = deletar(clientes, &pos);
+        break;
       case 3:
-      resultado = listar(clientes, &pos);
-      break;
+        resultado = listar(clientes, &pos);
+        break;
       case 4:
-      resultado = debito(clientes, &pos);
+        resultado = debito(clientes, &pos);
+        break;
+      case 5:
+        resultado = deposito(clientes, &pos);
+        break;
+      case 6:
+        resultado = pix(clientes, &pos);
+        break;
       case 8:
-      resultado = salvarbinario(clientes, &pos);
-      break;
+        resultado = salvarbinario(clientes, &pos);
+        break;
     }
   } while (opcao != 0);
 }
