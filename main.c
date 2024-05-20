@@ -17,6 +17,7 @@ int main() {
     printf("6 - PIX\n");
     printf("7 - Extrato\n");
     printf("8 - Salvar em Binário\n");
+    printf("9 - Carregar de Binário\n");
     printf("0 - Sair\n");
     printf("Escolha uma opção: ");
 
@@ -45,7 +46,13 @@ int main() {
         resultado = extrato(clientes, &pos);
         break;
       case 8:
-        resultado = salvarbinario(clientes, &pos);
+        resultado = salvarbinario(clientes, pos);
+        break;
+      case 9:
+        resultado = carregarbinario(clientes, &pos);
+        break;
+      default:
+        printf("Opção inválida!");
         break;
     }
   } while (opcao != 0);

@@ -41,11 +41,12 @@ typedef enum {
     SEM_CLIENTES,
     LISTA_VAZIA,
     ABRIR,
+    LER,
     ESCRITA,
     SALDO_INSUFICIENTE,
     SENHA_INCORRETA,
     ERRO_ARQUIVO,
-    CREDENCIAIS_INVALIDAS,
+    CREDENCIAIS_INVALIDA,
 } ERROS;
 
 typedef ERROS (*funcao)(Cliente[], int *);
@@ -53,7 +54,8 @@ typedef ERROS (*funcao)(Cliente[], int *);
 ERROS criar(Cliente clientes[], int *pos);
 ERROS deletar(Cliente clientes[], int *pos);
 ERROS listar(Cliente clientes[], int *pos);
-ERROS salvarbinario(Cliente clientes[], int *pos);
+ERROS salvarbinario(Cliente clientes[], int pos);
+ERROS carregarbinario(Cliente clientes[], int *pos);
 ERROS debito(Cliente clientes[], int *pos);
 ERROS deposito(Cliente clientes[], int *pos);
 ERROS pix(Cliente clientes[], int *pos);
