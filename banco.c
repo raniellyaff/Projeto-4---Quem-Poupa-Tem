@@ -105,21 +105,26 @@ ERROS listar(Cliente clientes[], int *pos) {
   return OK;
 }
 
-ERROS salvarbinario(Cliente clientes[], int *pos) {
-  FILE *arquivo = fopen("contas.bin", "wb");
+ERROS salvarbinario(Cliente clientes[], int pos) {
+  FILE *arquivo =
+      fopen("contas.bin", "wb"); // Abre o arquivo para escrita binária
+
   if (arquivo == NULL) {
-    return ABRIR; // Retornar erro
+    return ABRIR;
+    }
+
+    // Escreve os dados das no arquivo
+  int qtd = fwrite(clientes, sizeof(Cliente), pos, arquivo);
+
+  if (qtd != pos) {
+    fclose(arquivo);
+    return ESCRITA;
   }
-  // Escrever os dados dos clientes no arquivo
-  if (fwrite(clientes, sizeof(Cliente), pos, arquivo) != pos) {
-    fclose(arquivo); // Fechar o arquivo antes de retornar o erro
-    return ESCRITA;  // Retornar erro de escrita
-  }
+
   fclose(arquivo);
-  printf("Dados salvos com sucesso.\n");
-  clearBuffer();
-  return OK; // Retornar OK
-}
+  printf("Clientes exportados para arquivo binário com sucesso.\n");
+  return OK;
+  }
 
 ERROS debito(Cliente clientes[], int *pos) {
   char cpf[CPF];     // Variável para armazenar o CPF
@@ -322,6 +327,26 @@ ERROS extrato(Cliente clientes[], int *pos) {
   printf("Cliente com CPF %s não encontrado.\n", cpf);
   return CLIENTE_NAO_ENCONTRADO;
   }
+}
+
+ERROS carregarbinario(Cliente clientes[], int *pos) {
+  FILE *arquivo = fopen("contas.bin", "rb"); // abre arquivo contatos.bin que já existe na pasta para leitura
+
+  if (arquivo == NULL) { // caso valor do arquivo seja igual a NULL, significa que não foi possível abrir
+    return ABRIR;
+  }
+
+  int qtd = fread(clientes, sizeof(Cliente), TOTAL, arquivo); // define uma variável qtde que será o tamanho do array de structs lidos
+
+  if (qtd <= 0) { // caso o tamanho do array seja diferente da quantidade de contatos lidos, siginifica que houve problemas na leitura do arquivo, logo ele será fechado e retornará o erro LER
+    fclose(arquivo);
+    return LER;
+  }
+  *pos = qtd; 
+
+  fclose(arquivo); // fecha o arquivo pois todos os contatos foram lidos
+  printf("\nClientes salvos de arquivo binário com sucesso! <3\n"); //retorna mensagem de sucesso e OK pois não encontrou erros
+  return OK;
 }
 
 void clearBuffer() {
